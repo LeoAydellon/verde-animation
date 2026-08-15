@@ -125,6 +125,42 @@ a.watch:active{background:var(--accent-2)}
 ul.plain{margin:8px 0;padding-left:20px}ul.plain li{margin:5px 0}
 .foot{margin-top:36px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* my-progress mini button */
+.minibtn{border:1px solid var(--line);background:var(--surface);color:var(--accent);font-weight:800;
+  font-size:13px;padding:8px 13px;border-radius:20px;cursor:pointer}
+.minibtn:active{background:var(--accent-soft)}
+
+/* modal */
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(20,15,8,.5);display:none;align-items:center;justify-content:center;padding:18px}
+.overlay.on{display:flex}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal h3{margin:0 0 6px;font-size:20px}
+.modal .code{font-family:ui-monospace,Menlo,monospace;font-size:16px;font-weight:700;background:var(--surface-2);
+  border:1px dashed var(--line);border-radius:10px;padding:12px;margin:12px 0;word-break:break-all;color:var(--accent-2);text-align:center}
+.modal .x{margin-top:8px;display:flex;gap:8px}
+.modal .x button{flex:1;border:0;border-radius:10px;padding:12px;font-weight:800;cursor:pointer}
+.btn-primary{background:var(--accent);color:#fff}.btn-ghost{background:var(--surface-2);color:var(--ink)}
+
+/* teacher board */
+.addrow{display:flex;gap:8px;margin:10px 0}
+.addrow input{flex:1;min-width:0;font:inherit;font-size:15px;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.addrow button{border:0;background:var(--accent);color:#fff;font-weight:800;border-radius:10px;padding:0 16px;cursor:pointer}
+.srow{display:flex;align-items:center;gap:11px;padding:12px 0;border-top:1px solid var(--line)}
+.srow:first-child{border-top:0}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.dot.g{background:var(--good)}.dot.r{background:#cf3742}.dot.y{background:#d9a220}.dot.n{background:var(--line)}
+.srow .si{flex:1;min-width:0}
+.srow .si .nm{font-weight:700;font-size:15.5px}
+.srow .si .mt{font-size:12.5px;color:var(--muted)}
+.srow .mini{height:5px;background:var(--surface-2);border-radius:3px;margin-top:5px;max-width:200px}
+.srow .mini i{display:block;height:100%;border-radius:3px;background:var(--good)}
+.srow .act{flex:none;display:flex;gap:6px;align-items:center}
+.srow .act input{width:120px;font:inherit;font-size:13px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.srow .act .up{border:0;background:var(--accent-soft);color:var(--accent-2);font-weight:800;border-radius:8px;padding:8px 10px;cursor:pointer;font-size:13px}
+.srow .act .rm{border:0;background:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1}
+.legend2{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:12px}
+.legend2 span{display:inline-flex;align-items:center;gap:6px}
 </style>
 
 <div class="appbar"><div class="in">
@@ -151,6 +187,8 @@ ul.plain{margin:8px 0;padding-left:20px}ul.plain li{margin:5px 0}
   <div class="foot">Verde Animation · one app for the whole two-year program. Videos from your DocsAnimation library · standards from the CTE app · dual-enrollment matched to Yavapai FMA courses. Progress is saved on each device.</div>
 </div>
 
+<div class="overlay" id="overlay"><div class="modal" id="modalbox"></div></div>
+
 <script>
 const DATA = {"foundations":[{"t":"How to take notes for lectures and demonstrations","u":"https://drive.google.com/file/d/1S_k4wq4_QViq6frd_LbnPyOWziKndztv/view"},{"t":"Completing assignments and research","u":"https://drive.google.com/file/d/1_bW-PZHPA4ifb-ERrqj3g7vAjh2Jtlsd/view"},{"t":"Your sketchbook, syllabus and textbooks (4331 and the 3 textbooks)","u":"https://drive.google.com/file/d/1yNroaUy4ejTqiA6S3Q7wIOb_-HgXf0w1/view"},{"t":"Rules for care of work stations, saving/titling work, and the Google suite","u":"https://drive.google.com/file/d/1guovGUdnbEkR2qbjdopDTD4UOihNW0H5/view"},{"t":"How to develop your portfolio and reel","u":"https://drive.google.com/file/d/19RbpmKqprmIDCfpyDnpWYDd7E4cMz3Oi/view"},{"t":"How to set and reach your artistic goals","u":"https://drive.google.com/file/d/12gpjw7O8JA39GXT1AEwLt-Y0VqCb2pBq/view"},{"t":"Drawing fundamentals, terms and concepts","u":"https://drive.google.com/file/d/1cruQOX1mevRRRAcsPD-9qpfPCH45Xuf6/view"},{"t":"How to study and watch films and books","u":"https://drive.google.com/file/d/1kLhDMCY2EuRgHI3PSx8UDKiA4KD2701H/view"},{"t":"Introduction to Animation","u":"https://drive.google.com/file/d/1XPwDzbQVDfVZVKyykPrxpCTAOK1hCgpG/view"},{"t":"Becoming the best: your health and your art","u":"https://drive.google.com/file/d/1mvq9jJLfBPPIX4N9bz5N8p7pyQ0oEoK5/view"}],"figure":[{"t":"Introduction to the Human Figure","u":"https://youtu.be/ksXDfTCxonA"},{"t":"Basics of Drawing the Figure - Gesture","u":"https://youtu.be/KC4u7oNK6uk"},{"t":"Construction (bean, egg, cylinders, spheres, cubes)","u":"https://youtu.be/Mj-GZwvSmZ4"},{"t":"Details (hair, eyes, expressions, shading, hatching)","u":"https://youtu.be/0y86dDXeZWY"},{"t":"Putting it all together - multiple figures in composition","u":"https://youtu.be/iEsy_THaY5w"},{"t":"Head, ribcage and pelvis","u":"https://youtu.be/TjfgJJoLlv8"},{"t":"Arms - bones and muscle groups","u":"https://youtu.be/Z7BYPbuNn2g"},{"t":"Legs - bones and muscle groups","u":"https://youtu.be/XmnrP4nr3H4"},{"t":"Hands and feet","u":"https://youtu.be/OrpWCH9xvqs"},{"t":"Head - measurements, proportions and muscles of the face","u":"https://youtu.be/uWL54_8bjb4"}],"character":[{"t":"Intro to Character Design (history 1920s-modern)","u":"https://youtu.be/m7Cy6LS7kcg"},{"t":"Design a Hero Character (cowboy)","u":"https://youtu.be/ptY-W8nTjNo"},{"t":"Design a Villain Character (villain cowboy - gesture)","u":"https://youtu.be/B8z06cVyu4k"},{"t":"Design a Heroine (western cowgirl princess - construction)","u":"https://youtu.be/mUQaIBN_wcA"},{"t":"Design a Cute Character (animal)","u":"https://youtu.be/dA1pKiQcO9U"},{"t":"Main Character farm animal (story of your character)","u":"https://youtu.be/NN1iaifY-O8"},{"t":"Villain animal character exploration","u":"https://youtu.be/X8aD3QcIGzk"},{"t":"Turnaround and action poses","u":"https://youtu.be/LSZo3qO9Jlg"},{"t":"Color and line quality","u":"https://youtu.be/kMBLaaClVwk"},{"t":"Designing a model sheet","u":"https://youtu.be/tlDDYLRXBRY"}],"stilllife":[{"t":"History of Still Life / Composition","u":"https://drive.google.com/file/d/1EyNyuedfbUxJP6hcWpW8AN5D6IRRz7d9/view"},{"t":"Setting up your still life - composition part 2","u":"https://drive.google.com/file/d/1lkjQAjl4fqXWSwVmRVfavUVIEKo1pTlH/view"},{"t":"Measurements and proportion - composition part 3","u":"https://drive.google.com/file/d/1-BAB_D9xxj2oDve7VP5EbFBz-L4Jsfq1/view"},{"t":"Storytelling and gesture in still life","u":"https://drive.google.com/file/d/1PVGNOPkrEOHe9JIOgJCXmyohTCHwg41P/view"},{"t":"Shapes and forms construction","u":"https://drive.google.com/file/d/1Pp0LIuR-wWqq1Aju1SWRXC4EKEhdZG-d/view"},{"t":"Perspective and depth","u":"https://drive.google.com/file/d/1ZfKKOCZ14mcSN97rlZPdhT-HFh8qKU7B/view"},{"t":"Texture details","u":"https://youtu.be/K5v2UmjiLOI"},{"t":"Shading and light - values and tones","u":"https://drive.google.com/file/d/1Zc92f1IrqUSlDB7W92NmVvSGsyLL45K2/view"},{"t":"Color in still life - warm and cool renaissance palette","u":"https://drive.google.com/file/d/1e68dztK76ghhmMmX3KcjFyGvXXsZg4Qo/view"},{"t":"The three-hour still life picture (drawing endurance)","u":"https://youtu.be/-mMWUatFUTw"}],"layout":[{"t":"Introduction to layout","u":"https://youtu.be/VPaHyQ9CZdU"},{"t":"1-point perspective layout (pet shop)","u":"https://youtu.be/e0-YTT44Z-k"},{"t":"2-point perspective (cartoon neighborhood)","u":"https://youtu.be/ZIq21ewKofU"},{"t":"3-point perspective (city birds-eye view)","u":"https://youtu.be/rZUiG4nKqdw"},{"t":"Desert scene (Road Runner)","u":"https://youtu.be/InL0c0OVaWg"},{"t":"Red Riding Hood forest","u":"https://youtu.be/rt0kPLjRMF0"},{"t":"Cemetery","u":"https://youtu.be/GzE3IDZHEF4"},{"t":"Swamp","u":"https://youtu.be/3lMgGS2mIiU"},{"t":"Pirate's cave","u":"https://youtu.be/Mk9xa1EEya4"},{"t":"Interior of a spaceship","u":"https://youtu.be/Clh3xJJOO3o"}],"color":[{"t":"Color wheel, color rules & harmonies","u":"https://drive.google.com/file/d/1PoX5riotwTGywi5HJNULZoazmwgoQeJu/view"},{"t":"Color theory terms and concepts part 1","u":"https://drive.google.com/file/d/1BWIes2jDafbfg2JHQ9tsbWcdcWxkrwTY/view"},{"t":"Color theory terms and concepts part 2","u":"https://drive.google.com/file/d/13uerRyDh9zgTqVTpyEcE5t2j6nwQSyBk/view"},{"t":"Color theory terms and concepts part 3","u":"https://drive.google.com/file/d/1h_P-hquAgFktA5ExmWUS2sTuyWw92kuZ/view"},{"t":"Composition part 1","u":"https://drive.google.com/file/d/1nDGX93jdnMAgZmsNw8boQYJuwer6Ipga/view"},{"t":"Composition part 2","u":"https://drive.google.com/file/d/12gbaVLXOxo8xLkkMN_gu6ABDwR3klYTY/view"},{"t":"Composition part 3","u":"https://drive.google.com/file/d/1vEmqLuw1mjigp8L71BflckklPRHHpXjY/view"},{"t":"The scary comp","u":"https://youtu.be/BYZpXnxvTj0"},{"t":"The beautiful comp","u":"https://youtu.be/63CiH8muG78"},{"t":"The rigid/solid comp","u":"https://youtu.be/Egkgx_xdlUc"}],"imagination":[{"t":"Introduction to Imagination Drawing","u":"https://youtu.be/tloZYN6FaLU"},{"t":"Invention Schematic","u":"https://youtu.be/du3nTfzILlo"},{"t":"Abstract painting of emotions","u":"https://youtu.be/sNshUiHRz8A"},{"t":"Creating a Monster","u":"https://youtu.be/YZMlx8EDJ9A"},{"t":"Visual Storytelling - the character and the frame","u":"https://youtu.be/bTJ0iVXUA1I"},{"t":"The tree exercise","u":"https://youtu.be/2oUuc0xWoz0"},{"t":"The fire creature","u":"https://youtu.be/Mh7JuJRGy9s"},{"t":"The water creature","u":"https://youtu.be/l9j0oTfWwaM"},{"t":"The hero's journey thumbnails","u":"https://youtu.be/gOhG67fUkiY"},{"t":"The three-panel comic and the one-panel comic","u":"https://youtu.be/MOU6H_SSu1s"}],"principles":[{"t":"Intro to the 12 Principles (bouncing ball, no decay)","u":"https://youtu.be/uM-R6QxzZA8"},{"t":"1st Principle — Squash & Stretch","u":"https://youtu.be/EWZhKj1eizM"},{"t":"2nd Principle — Anticipation","u":"https://youtu.be/NKpxQDhcsvk"},{"t":"3rd Principle — Staging (Sack)","u":"https://youtu.be/kjtBoiHqdac"},{"t":"4th Principle — Straight Ahead & Pose to Pose","u":"https://youtu.be/uDYz6W3ejIo"},{"t":"5th Principle — Follow Through & Overlapping (pendulum w/ tail)","u":"https://youtu.be/994K9UihUUU"},{"t":"6th Principle — Ease In / Ease Out","u":"https://youtu.be/b0cgdu4rDtU"},{"t":"7th Principle — Arcs","u":"https://youtu.be/hEDukRAOLxE"},{"t":"8th Principle — Secondary Action (walk cycle)","u":"https://youtu.be/4_WBSroBTrU"},{"t":"9th Principle — Timing (pendulum w/ decay)","u":"https://youtu.be/sQZFeWDYl-U"},{"t":"10th Principle — Exaggeration (the Cartoon Take)","u":"https://drive.google.com/file/d/1RPUwA2k_Ubij1EwoDW5gsjYShgfAj0_y/view"},{"t":"11th & 12th Principle — Solid Drawing & Appeal","u":"https://drive.google.com/file/d/1PQxJ65nnYzCmsqJex5chA34D69Ajnke5/view"}],"visualstory":[{"t":"The story of the story - the natural way of storytelling / relating memories as stories","u":"https://drive.google.com/file/d/1SM5aJQz76-EDjJ-EkWKjs6iiZdayhba_/view"},{"t":"World building - your characters and the worlds they live in","u":"https://drive.google.com/file/d/1gFjdsmNG8SbqBBqNeVrBAa1vkRSUl1Zw/view"},{"t":"Inside feelings and what characters look like on the outside","u":"https://drive.google.com/file/d/1FSwrzCUY6kUTceVc-RRmSF7UYiGQ7Hot/view"},{"t":"Wants and needs","u":"https://drive.google.com/file/d/1Q9B4otqFDUQgP18Eer-eX8mLZ75jiVqm/view"},{"t":"Obstacles and roadblocks","u":"https://drive.google.com/file/d/1PueCa3D8NNLhn1hiAw6bRkevjh4pN5pQ/view"},{"t":"Risks and stakes","u":"https://drive.google.com/file/d/1oPZNYjBm32ksJ9Q5w3czbx-GfE6sxYiP/view"},{"t":"Story spine, story beats, theme and moral","u":"https://drive.google.com/file/d/16dArXPmAp_ng9UeeYWuypO0hGgIe2rEE/view"},{"t":"The 3 acts","u":"https://drive.google.com/file/d/1JaYHWE14z4XNbTrut3U6BsBnbQnmzdVQ/view"},{"t":"Line, tone and color","u":"https://youtu.be/C_IVYjNrCmQ"},{"t":"Visual story terms and definitions","u":"https://youtu.be/TYJTqBaMBts"}],"sketchbook":[{"t":"Intro to using the sketchbook (materials, subject matter, 4331)","u":"https://drive.google.com/file/d/1a9JhioK_rNImH1aIbOkSWQi2_GaNZHpu/view"},{"t":"Drawing from a book / reference","u":"https://drive.google.com/file/d/1xcL8MYaIzpG88yec0yqnv9Cq1gA2mZZx/view"},{"t":"Drawing from Life","u":"https://drive.google.com/file/d/1ArKzb9D3NXZWyjhCG9xm7b1YyaV8vk1E/view"},{"t":"Drawing from Imagination","u":"https://drive.google.com/file/d/176z2HLXo09Nh02K-lvX637h7gTqHbH-u/view"},{"t":"Drawing from Memory","u":"https://drive.google.com/file/d/1xEZDY98wTs0uCuaz_i3ASYrSnT1QEG3r/view"}],"storyboard":[{"t":"Shot-by-shot analysis pt 1: your favorite film","u":"https://youtu.be/m57do94Fm7w"},{"t":"Shot-by-shot analysis pt 2: animated film (Beauty & the Beast opening)","u":"https://youtu.be/uPvdGkzZv8Y"},{"t":"Shot-by-shot analysis pt 3: horror / sci-fi / monster scene","u":"https://youtu.be/3cRSijs0R40"},{"t":"Shot-by-shot analysis pt 4: heavy-dialog film","u":"https://youtu.be/B9FRZahcsFg"},{"t":"Beginning-Middle-End: create your own story (the cat in the tree)","u":"https://youtu.be/c6IxKY2R4pc"},{"t":"Storyboard a script: the break-up scene","u":"https://youtu.be/ApskOvJ9YLE"},{"t":"Romeo & Juliet tower scene, made comedic","u":"https://youtu.be/6OWcZUFwbWo"},{"t":"Story script & sketches: 'The Great Gold Fish Escape'","u":"https://youtu.be/CA8MEPbUbTA"},{"t":"Beginning-Middle-End scene with an old man & a dog","u":"https://youtu.be/NvUBRoOE-EI"},{"t":"Your original 45-second student-film storyboard","u":"https://youtu.be/vjuyloRzM9I"}],"animatics":[{"t":"Animatic of a favorite movie scene: camera movements","u":"https://youtu.be/wZjVgByz0-o"},{"t":"Animatic of The Wizard of Oz","u":"https://youtu.be/qMJ108OUV3g"},{"t":"Romeo & Juliet animatic","u":"https://drive.google.com/file/d/1BtLy8BL_891TeqbBSwNdeJOoGNdMLCIu/view"},{"t":"Pulp Fiction animatic, part 1","u":"https://drive.google.com/file/d/1KdKGKnZt9zTUlqN8TRhf7kcGuyXPpNHa/view"},{"t":"Pulp Fiction animatic, part 2 / board clean-up","u":"https://drive.google.com/file/d/1I4CBbTk5zr2WYOHJRv7wAaTlNmFoxpaT/view"},{"t":"Pulp Fiction animatic, part 3","u":"https://drive.google.com/file/d/1kR7JLJBTtF3lp2WTFCam5llTPKRJMNSu/view"},{"t":"Turning your storyboard into an animatic","u":"https://drive.google.com/file/d/1qIcWFjD2rGoNApTN9BGlMQsUPmX3LNsQ/view"},{"t":"Recording your dialog, sounds and music","u":"https://drive.google.com/file/d/1nuZCAI9HispLyqqwkhGTj_WRWJpxVzix/view"},{"t":"Building the animatic & sound, part 1","u":"https://drive.google.com/file/d/12HbbP31ABj8PBu8lIXtW8giQ5kaLrxuw/view"},{"t":"Building the animatic & sound, part 2 (editing & final touches)","u":"https://drive.google.com/file/d/1ZPsJyLKxVQdXIGLqW4COa0N3bSad_4QD/view"}],"background":[{"t":"Fantasy forest: setup & layout","u":"https://drive.google.com/file/d/1tHnSx4ADnzQSWOGxC1OSF2WX0auSwgfR/view"},{"t":"Fantasy forest: rough drawing","u":"https://drive.google.com/file/d/1MC0K-zypbtOW75yUZ14wU35Wdkog1mUl/view"},{"t":"Fantasy forest: tonal pass","u":"https://drive.google.com/file/d/1hR2U_zgT_GWoh4DcBDbEpUuH7RlVtccg/view"},{"t":"Fantasy forest: color","u":"https://drive.google.com/file/d/1y2FeqLTV5QxbA6B2zLg9Te5CNfjw8VOq/view"},{"t":"Dinosaur land: 8 thumbnails","u":"https://drive.google.com/file/d/1wGzFPKGfLBgqARtU147bgaSVvULoV_Lz/view"},{"t":"Dinosaur land: tonal drawing","u":"https://drive.google.com/file/d/1B2OMZf5ug8--89JJIMyKQ7uCffgrxiL6/view"},{"t":"Dinosaur land: color studies","u":"https://drive.google.com/file/d/110RaTkUtaNJ4J2JgMlDHnPCoDn4G28Fd/view"},{"t":"Dinosaur land: finished color","u":"https://drive.google.com/file/d/1hnwL3ldtzYMDsAOPJ1baaDtawJtVlxFx/view"},{"t":"Swamp: drawing","u":"https://drive.google.com/file/d/1kgsiDLiaj3puXWZl2mtM8-hY_PoODyEV/view"},{"t":"Swamp: color","u":"https://drive.google.com/file/d/1oHWKqoNGSDQTjJi43HMITtkc3jheS47g/view"}],"digitalpaint":[{"t":"Introduction to painting with an iPad or other digital hardware","u":"https://drive.google.com/file/d/1Q3iU3v5n_6h6tP_aPhFOva5f1FrcfbsX/view"},{"t":"Master copy - matching brushstrokes (Van Gogh)","u":"https://youtu.be/SI4o22YSAU8"},{"t":"Painting a monochromatic gesture","u":"https://youtu.be/ylCw750V0gA"},{"t":"Simplified shapes and colors part 1","u":"https://youtu.be/XdkYydC9bY0"},{"t":"Simple shapes and colors part 2","u":"https://youtu.be/5oJG_AF4RPw"},{"t":"Intro to painting sketches","u":"https://youtu.be/3ClAwK1WGeg"},{"t":"Garden/patio paint sketch","u":"https://youtu.be/DDgwRS1Qq84"},{"t":"Urban landscape","u":"https://youtu.be/yC5LQCpz4fU"},{"t":"Character painting part 1","u":"https://youtu.be/E0sOYviDYDU"},{"t":"Character painting part 2","u":"https://youtu.be/2IaMenG96Cs"}],"animation101":[{"t":"Intro to animation, software & the bouncing-ball test","u":"https://drive.google.com/file/d/1gsbrRd7dQyaqWgDxOI13axmNXsDFxEJg/view"},{"t":"Pendulum swing; ball zoom in / hover / zoom out","u":"https://drive.google.com/file/d/1y83VmJLN8Jv1fO7atFMnKJijVki-GDnz/view"},{"t":"Straight-line ball; slow-in/slow-out at 24fps; ball hits floor & shrinks away","u":"https://drive.google.com/file/d/19v8PqNGtwuHzT1Balnr-umPch63qnJLl/view"},{"t":"Ball bouncing across the screen; extreme squash & stretch in place","u":"https://drive.google.com/file/d/1agSQgYgvJOQXVN78x_kCelBuePzYCiA-/view"},{"t":"Ball hits wall & slows to a stop; no-decay loop with spinning stars","u":"https://drive.google.com/file/d/1XRYF6hjafm4IG1s7znaUUgYVUTU1107L/view"},{"t":"Ball hits wall & deflates; ball in perspective coming toward viewer","u":"https://drive.google.com/file/d/1GmCtiDyQrkemV1hoLDC8LYnXdn9mZQjF/view"},{"t":"Ball in perspective away from viewer; bowling-ball drop with camera shake","u":"https://drive.google.com/file/d/1JSWl3wdFSbQE6d4JQh2GIosw3VsSaD1V/view"},{"t":"Bubble drops & floats away (no pop); ball of goo stretches across the screen","u":"https://youtu.be/qSwWmRq33B4"},{"t":"Ball morphs into a triangle (slow, then sudden)","u":"https://youtu.be/J8buB2yqDSs"},{"t":"Pendulum swing loop; pendulum with decay; your personal ball bounce","u":"https://youtu.be/xK7J0k19mq8"}],"inking":[{"t":"Intro to clean-up (correcting & matching rough drawings)","u":"https://youtu.be/WSx8LR-MsvA"},{"t":"Intro to inking and coloring","u":"https://youtu.be/xBZ8H4abm7A"},{"t":"Intro to coloring","u":"https://youtu.be/lN6uwSPfiUQ"}],"pencil":[{"t":"Juggling","u":"https://drive.google.com/file/d/1dMxcu8OQ26e0Vux_COsYsUaf2OlgW9P1/view"},{"t":"Lifting a heavy object","u":"https://youtu.be/fEyOKsN-kiY"},{"t":"Annoyed — turning your back on another character","u":"https://drive.google.com/file/d/1xbA02pksmEm3jMcvnS3iDe2R4o_RXc1m/view"},{"t":"Pressing an elevator button and waiting for it","u":"https://drive.google.com/file/d/1CB9HEQExwzSSQSYeCXAqJ60ng01p_ObK/view"},{"t":"Peering around a corner","u":"https://drive.google.com/file/d/1Pn1YnNUE3gAinUTJlfrNIz6FsE6-K8jp/view"},{"t":"Starting to say something, then stopping","u":"https://drive.google.com/file/d/1HaFq-rLhyht4CB7mwlnihXzbW4Q8IGbe/view"},{"t":"Putting on and zipping up a jacket","u":"https://drive.google.com/file/d/1t-vmN0vDgzqN3bYFSNVHMuLggXf2dvj6/view"},{"t":"Texting, waiting, then reading and reacting","u":"https://drive.google.com/file/d/10FowVpfTne9V9yUYl2xjoYueVw2wqQnV/view"},{"t":"Standing up from lying on the ground","u":"https://drive.google.com/file/d/1CBGgRGnaGJz_YAt63nKQ1-Or4pXlTQV8/view"},{"t":"Personal acting & action scene","u":"https://drive.google.com/file/d/1TfTG1E43S4hRRLU1vo1NsAwOtLjY_Evf/view"}]};
 const PLAN = [{"id":"I","tag":"Animation I","name":"Draw it &amp; write it","blurb":"Year one — learn to draw and design, then learn to write a story for the screen.","weeks":"The Foundations unit is also your software &amp; hardware start: set up the iPad and app, workstation rules, saving your work, and start the sketchbook.","semesters":[{"name":"Fall","course":"FMA100 — Animation Principles","goal":"Draw, design, and your first real motion.","units":[{"key":"foundations","name":"Foundations (Intro to Drawing)","do":"Get set up and learn drawing fundamentals."},{"key":"figure","name":"Figure Drawing","do":"The human figure — gesture, construction, anatomy."},{"key":"character","name":"Character Design","do":"Design heroes, villains, and a model sheet."},{"key":"stilllife","name":"Still Life","do":"Draw from observation — light and shadow."},{"key":"layout","name":"Layout &amp; Perspective","do":"1-, 2-, and 3-point perspective; build scenes."},{"key":"color","name":"Color &amp; Composition","do":"Color theory and strong composition."},{"key":"imagination","name":"Imagination Drawing","do":"Invent creatures and worlds from your head."},{"key":"principles","name":"The 12 Principles + first animation","do":"The rules that make motion feel alive — plus your first short."}]},{"name":"Spring","course":"FMA103 — Screenwriting I","goal":"Genuinely writing for the screen.","units":[{"syllabus":true,"name":"Your Screenwriting course","do":"Your 8-unit Screenwriting dual-credit syllabus — the spine of the semester."},{"key":"visualstory","name":"Visual Storytelling","do":"Story structure — wants and needs, stakes, the 3 acts."},{"build":true,"name":"Script → shots + across-media writing","do":"Turn scripts into shots; write in TV, doc, and commercial formats."}]}],"always":["Sketchbook — daily warm-up","Pencil tests — start light","Standards practice — weekly"]},{"id":"II","tag":"Animation II","name":"Plan it &amp; make it","blurb":"Year two — plan a film in the fall, then produce and deliver it in the spring.","weeks":"Software &amp; hardware refresh — the production pipeline: animation software, files, and the shared workflow.","semesters":[{"name":"Fall","course":"FMA110 — Pre-Production","goal":"Plan the animated film.","units":[{"key":"storyboard","name":"Storyboarding","do":"Break down films shot-by-shot, then board your own short."},{"key":"animatics","name":"Animatics","do":"Turn boards into a timed animatic with camera, dialog, and sound."},{"key":"background","name":"Background Design","do":"Design and paint the worlds your short lives in."},{"key":"digitalpaint","name":"Digital Painting","do":"Paint the film’s assets and backgrounds on the iPad."},{"build":true,"name":"Script breakdown, budget &amp; schedule","do":"The producer’s paperwork — plan the short like a real production."}]},{"name":"Spring","course":"FMA102 — Production I","goal":"Produce and deliver the short.","units":[{"key":"animation101","name":"Animation 101","do":"Actually animating — balls, pendulums, squash &amp; stretch."},{"key":"inking","name":"Inking &amp; Clean-Up","do":"Clean up, ink, and color for a finished look."},{"build":true,"name":"Sound, delivery &amp; shot study","do":"Add sound, re-create a scene, and deliver your capstone short."}]}],"always":["Pencil tests — advanced acting","Sketchbook — daily","Standards practice — final push"]}];
@@ -161,6 +199,55 @@ try{ done = JSON.parse(localStorage.getItem(LS)||'{}'); }catch(e){ done = {}; }
 function save(){ try{ localStorage.setItem(LS, JSON.stringify(done)); }catch(e){} }
 function keyOf(lv,ui,vi){ return lv+'|'+ui+'|'+vi; }
 let curLevel = 'I';
+
+// ---- progress code + board storage ----
+function lsGet(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch(e){ return d; } }
+function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function unitList(id){
+  const lv=PLAN.find(l=>l.id===id); const arr=[]; let ui=0;
+  lv.semesters.forEach(s=>s.units.forEach(u=>{ if(u.key) arr.push({ui:ui,key:u.key,name:u.name}); ui++; }));
+  arr.push({ui:900,key:'pencil',name:'Pencil Tests'});
+  return arr;
+}
+function computeProgress(id){
+  const us=unitList(id); let total=0,doneC=0,curName=null,curNum=0,idx=0;
+  us.forEach(u=>{ idx++; const vids=DATA[u.key]||[]; total+=vids.length; let d=0;
+    vids.forEach((v,vi)=>{ if(done[keyOf(id,u.ui,vi)]) d++; }); doneC+=d;
+    if(curName===null && d<vids.length){ curName=u.name; curNum=idx; } });
+  if(curName===null){ curName='Finished 🎉'; curNum=us.length; }
+  return {done:doneC,total:total,curName:curName,curNum:curNum,units:us.length};
+}
+function cleanName(s){ return String(s||'').toUpperCase().replace(/[^A-Z0-9 ]/g,'').replace(/\s+/g,' ').trim(); }
+function makeCode(id,name){ const p=computeProgress(id);
+  return 'VA1.'+id+'.'+p.done+'.'+p.total+'.'+p.curNum+'.'+cleanName(name||'ME'); }
+function parseCode(str){ const a=String(str||'').trim().split('.');
+  if(a[0]!=='VA1'||a.length<6) return null;
+  return {id:a[1], done:+a[2], total:+a[3], cur:+a[4], name:a.slice(5).join('.')}; }
+function curUnitName(id,curNum){ const us=unitList(id); const u=us[curNum-1]; return u?u.name:'—'; }
+
+// ---- modal ----
+function showModal(html){ document.getElementById('modalbox').innerHTML=html; document.getElementById('overlay').classList.add('on'); }
+function closeModal(){ document.getElementById('overlay').classList.remove('on'); }
+document.getElementById('overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeModal(); });
+function showMyProgress(){
+  const p=computeProgress(curLevel);
+  const nm = lsGet('vanim_myname','') || '';
+  const code = makeCode(curLevel, nm||'ME');
+  showModal(
+    '<h3>My progress — Animation '+curLevel+'</h3>'
+    +'<p style="color:var(--muted);font-size:14.5px;margin:.2rem 0 0">You’ve done <b style="color:var(--ink)">'+p.done+' of '+p.total+'</b> lessons. On now: <b style="color:var(--ink)">'+p.curName+'</b>.</p>'
+    +'<label style="font-size:13px;color:var(--muted);display:block;margin:12px 0 4px">Your name (so your teacher knows the code)</label>'
+    +'<input id="mynameIn" value="'+(nm.replace(/"/g,"&quot;"))+'" placeholder="First Last" style="width:100%;font:inherit;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--ink)" oninput="refreshCode()">'
+    +'<div class="code" id="mycode">'+code+'</div>'
+    +'<div class="x"><button class="btn-primary" onclick="copyCode()">Copy my code</button><button class="btn-ghost" onclick="closeModal()">Close</button></div>'
+    +'<p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">Turn this in to your teacher (paste in Google Classroom). Also share your Standards code from the Standards tab.</p>'
+  );
+}
+function refreshCode(){ const nm=document.getElementById('mynameIn').value; lsSet('vanim_myname',nm);
+  document.getElementById('mycode').textContent=makeCode(curLevel,nm||'ME'); }
+function copyCode(){ const t=document.getElementById('mycode').textContent;
+  try{ navigator.clipboard.writeText(t); }catch(e){}
+  const b=event.target; const o=b.textContent; b.textContent='Copied ✓'; setTimeout(()=>b.textContent=o,1400); }
 
 const CK = '<svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"></polyline></svg>';
 
@@ -199,6 +286,7 @@ function renderLessons(){
   let ui = 0;
   const seg = '<div class="seg">'+PLAN.map(l=>'<button class="'+(l.id===curLevel?'on':'')+'" onclick="setLevel(\''+l.id+'\')">'+l.tag+'</button>').join('')+'</div>';
   let out = seg;
+  out += '<div style="display:flex;justify-content:flex-end;margin:8px 2px 0"><button class="minibtn" onclick="showMyProgress()">📋 My progress code</button></div>';
   out += '<div class="levhead"><h1 class="pt display" style="margin:10px 0 2px">'+lv.name+'</h1><p class="sub">'+lv.blurb+'</p></div>';
   out += '<div class="weeks"><span class="n">Weeks 1–4</span><span class="t"><b>Software &amp; hardware first.</b> '+lv.weeks+'</span></div>';
   lv.semesters.forEach(s=>{
@@ -241,9 +329,57 @@ function renderProgram(){
   document.getElementById('v-program').innerHTML = out;
 }
 
+// ---- teacher board ----
+function getRoster(){ return lsGet('vanim_roster',[]); }
+function getBoard(){ return lsGet('vanim_board',{}); }
+function addStudent(){
+  const inp=document.getElementById('newStu'); const nm=cleanName(inp.value);
+  if(!nm) return; const r=getRoster(); if(!r.includes(nm)) r.push(nm); lsSet('vanim_roster',r); inp.value=''; renderBoard();
+}
+function removeStudent(nm){ let r=getRoster().filter(x=>x!==nm); lsSet('vanim_roster',r);
+  const b=getBoard(); delete b[nm]; lsSet('vanim_board',b); renderBoard(); }
+function updateStudent(nm,idx){
+  const inp=document.getElementById('code'+idx); const p=parseCode(inp.value);
+  const msg=document.getElementById('msg'+idx);
+  if(!p){ if(msg){ msg.textContent='That code doesn’t look right — copy it from the student’s “My progress code”.'; msg.style.color='#cf3742'; } return; }
+  const b=getBoard(); const ex=b[nm];
+  b[nm]={id:p.id,done:p.done,total:p.total,cur:p.cur,prevDone:(ex?ex.done:null),ts:Date.now()};
+  lsSet('vanim_board',b); inp.value=''; renderBoard();
+}
+function renderBoard(){
+  const r=getRoster(), b=getBoard();
+  let rows;
+  if(!r.length){ rows='<p class="note-inline">Add your students below. Each week, ask them to open <b>My progress code</b> (top of the Lessons tab) and turn in their code — paste it here to see who’s moving and who’s stuck.</p>'; }
+  else rows = r.map((nm,i)=>{
+    const e=b[nm]; let cls,lab,meta,pct=0;
+    if(!e){ cls='n'; lab=''; meta='No code yet'; }
+    else { pct=e.total?Math.round(e.done/e.total*100):0;
+      const unit=curUnitName(e.id,e.cur);
+      meta='Animation '+e.id+' · '+e.done+'/'+e.total+' lessons · on: '+unit;
+      if(e.prevDone==null){ cls='y'; lab='first code in'; }
+      else if(e.done>e.prevDone){ cls='g'; lab='moving'; }
+      else { cls='r'; lab='no movement'; }
+    }
+    return '<div class="srow"><span class="dot '+cls+'"></span>'
+      +'<div class="si"><div class="nm">'+nm+(lab?' <span style="font-size:12px;color:var(--muted);font-weight:600">· '+lab+'</span>':'')+'</div>'
+      +'<div class="mt">'+meta+'</div>'
+      +(e?'<div class="mini"><i style="width:'+pct+'%"></i></div>':'')
+      +'<div class="mt" id="msg'+i+'" style="margin-top:4px"></div></div>'
+      +'<div class="act"><input id="code'+i+'" placeholder="paste code" aria-label="paste code for '+nm+'">'
+      +'<button class="up" onclick="updateStudent(\''+nm.replace(/'/g,"\\'")+'\','+i+')">Update</button>'
+      +'<button class="rm" title="Remove" onclick="removeStudent(\''+nm.replace(/'/g,"\\'")+'\')">×</button></div></div>';
+  }).join('');
+  const el=document.getElementById('boardBox'); if(el) el.innerHTML=rows;
+}
+
 function renderTeacher(){
   document.getElementById('v-teacher').innerHTML =
-    '<h1 class="pt display">Run it in three steps</h1>'
+    '<h1 class="pt display">Class board</h1>'
+  + '<p class="lede">See who’s moving and who’s stuck. Students turn in their progress code each week; paste it by their name.</p>'
+  + '<div class="card"><div class="addrow"><input id="newStu" placeholder="Add a student’s name" onkeydown="if(event.key===\'Enter\')addStudent()"><button onclick="addStudent()">Add</button></div>'
+  + '<div id="boardBox"></div>'
+  + '<div class="legend2"><span><span class="dot g"></span>moving</span><span><span class="dot r"></span>no movement — check in</span><span><span class="dot y"></span>first code in</span><span><span class="dot n"></span>no code yet</span></div></div>'
+  + '<h2 class="sec display">Run it in three steps</h2>'
   + '<div class="card"><ul class="plain">'
   + '<li><b>1 · Share one link.</b> Send students this app’s web address (or add it to Google Classroom once). They open it on a Chromebook, pick their class, and every lesson is there — no posting videos one at a time.</li>'
   + '<li><b>2 · They watch, then make.</b> Students watch on the Chromebook (headphones), then animate on the iPad. Each lesson has a checkbox — their progress saves on their device.</li>'
@@ -272,5 +408,5 @@ document.getElementById('tabs').addEventListener('click', e=>{
   window.scrollTo({top:0,behavior:'auto'});
 });
 
-renderLessons(); renderProgram(); renderTeacher();
+renderLessons(); renderProgram(); renderTeacher(); renderBoard();
 </script>
