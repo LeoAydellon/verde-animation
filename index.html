@@ -1,0 +1,292 @@
+<title>Verde Animation</title>
+<style>
+  :root{
+    --bg:#f4f1ea; --surface:#fffdf8; --surface-2:#efe9dd;
+    --ink:#221f1a; --muted:#6f685b; --line:#e0d8c8;
+    --accent:#b25a1e; --accent-soft:#f3e3d0;
+    --hands:#b25a1e;   --hands-bg:#f6e6d4;
+    --std:#2f7d54;     --std-bg:#dcefe2;
+    --college:#3c4a90; --college-bg:#e0e3f3;
+    --always:#8a6d1a;  --always-bg:#f4ead0;
+    --build:#9a4b63;   --build-bg:#f3e0e7;
+    --shadow:0 1px 2px rgba(40,30,15,.06),0 6px 20px rgba(40,30,15,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#171512; --surface:#211e19; --surface-2:#2a2620;
+      --ink:#efe9dd; --muted:#a79e8c; --line:#332f28;
+      --accent:#e0975a; --accent-soft:#3a2c1d;
+      --hands:#e0975a;   --hands-bg:#382a1c;
+      --std:#7cc198;     --std-bg:#1f2f26;
+      --college:#9aa6e6; --college-bg:#232744;
+      --always:#d8b968;  --always-bg:#332b18;
+      --build:#e09ab4;   --build-bg:#3a2029;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.28);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#171512; --surface:#211e19; --surface-2:#2a2620;
+    --ink:#efe9dd; --muted:#a79e8c; --line:#332f28;
+    --accent:#e0975a; --accent-soft:#3a2c1d;
+    --hands:#e0975a;   --hands-bg:#382a1c;
+    --std:#7cc198;     --std-bg:#1f2f26;
+    --college:#9aa6e6; --college-bg:#232744;
+    --always:#d8b968;  --always-bg:#332b18;
+    --build:#e09ab4;   --build-bg:#3a2029;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.28);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .display{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px 90px}
+  code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+
+  /* app bar */
+  .appbar{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line);
+    padding:14px 0 0;margin-bottom:4px}
+  .appbar .inner{max-width:880px;margin:0 auto;padding:0 20px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand .mark{width:30px;height:30px;border-radius:8px;background:var(--accent);color:#fff;
+    display:grid;place-items:center;font-size:17px;flex:none}
+  .brand .name{font-weight:800;font-size:18px;letter-spacing:-.01em}
+  .brand .name span{color:var(--muted);font-weight:600}
+  .tabs{display:flex;gap:4px;margin-top:12px;overflow-x:auto;padding-bottom:0}
+  .tabs button{border:0;background:none;font:inherit;font-size:14px;font-weight:600;color:var(--muted);
+    padding:8px 12px 12px;border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer}
+  .tabs button.on{color:var(--accent);border-bottom-color:var(--accent)}
+  .tabs button.soon{opacity:.55;cursor:default}
+  .tabs button .dot{font-size:10px;color:var(--muted);margin-left:5px;font-weight:500}
+
+  header.top{padding:26px 0 18px}
+  .kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 8px}
+  h1{font-size:clamp(29px,6vw,42px);line-height:1.05;margin:0 0 12px;font-weight:800;text-wrap:balance}
+  .lede{font-size:18px;color:var(--muted);margin:0;max-width:62ch}
+
+  section.block{margin:34px 0 0}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:22px;margin:16px 0;box-shadow:var(--shadow)}
+  .card.tight{padding:16px 18px}
+
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;
+    padding:3px 10px;border-radius:999px;letter-spacing:.02em;white-space:nowrap;line-height:1.4}
+  .p-hands{background:var(--hands-bg);color:var(--hands)}
+  .p-std{background:var(--std-bg);color:var(--std)}
+  .p-college{background:var(--college-bg);color:var(--college)}
+  .p-always{background:var(--always-bg);color:var(--always)}
+  .p-build{background:var(--build-bg);color:var(--build)}
+  .p-line{border:1px solid var(--line);background:transparent;color:var(--muted)}
+
+  .legend{display:flex;flex-wrap:wrap;gap:10px 14px;margin:14px 0 0}
+  .legend .row{display:flex;gap:9px;align-items:flex-start;flex:1 1 240px;min-width:220px}
+  .legend .row span.t{font-size:13.5px;color:var(--muted)}
+  .legend .row b{color:var(--ink)}
+
+  .sem{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+  @media(max-width:640px){.sem{grid-template-columns:1fr}}
+  .sem .col{background:var(--surface-2);border-radius:11px;padding:15px 16px}
+  .sem h4{margin:0 0 2px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+  .sem .fma{font-size:16px;font-weight:800;margin:0 0 2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .sem .goal{font-size:13.5px;color:var(--muted);margin:0 0 10px;font-style:italic}
+
+  .unit{border-top:1px solid var(--line);padding:11px 0 4px}
+  .unit:first-of-type{border-top:0}
+  .unit .u-h{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .unit .u-name{font-weight:700;font-size:15.5px}
+  .unit .u-ct{font-size:12px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .unit .u-do{font-size:14px;color:var(--muted);margin:2px 0 0}
+  details.vids{margin:6px 0 2px}
+  details.vids summary{cursor:pointer;font-size:12.5px;color:var(--accent);font-weight:600;
+    list-style:none;display:inline-flex;align-items:center;gap:5px;user-select:none}
+  details.vids summary::-webkit-details-marker{display:none}
+  details.vids summary::before{content:"▸";font-size:10px;transition:transform .15s}
+  details.vids[open] summary::before{transform:rotate(90deg)}
+  details.vids ol{margin:8px 0 4px;padding-left:22px}
+  details.vids li{font-size:13px;color:var(--muted);margin:2px 0;line-height:1.45}
+
+  .weeks{display:flex;gap:12px;align-items:flex-start;background:var(--accent-soft);
+    border-radius:10px;padding:12px 14px;margin:2px 0 6px}
+  .weeks .n{font-weight:800;color:var(--accent);font-size:13px;white-space:nowrap;padding-top:2px;text-transform:uppercase;letter-spacing:.04em}
+  .weeks .t{font-size:14px}.weeks .t b{color:var(--ink)}
+
+  .always-strip{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px;
+    font-size:13.5px;color:var(--muted)}
+
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);
+    border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:14.5px}
+  .note b{color:var(--ink)}
+
+  .roadmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:6px}
+  .roadmap .r{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 13px}
+  .roadmap .r .rt{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px}
+  .roadmap .r .rs{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .roadmap .r.live{border-color:var(--accent)}
+  .tag-live{font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+  .tag-soon{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+
+  ul.open{list-style:none;padding:0;margin:6px 0 0}
+  ul.open li{position:relative;padding:8px 0 8px 26px;border-top:1px solid var(--line);font-size:15px}
+  ul.open li:first-child{border-top:0}
+  ul.open li::before{content:"☐";position:absolute;left:0;top:7px;color:var(--accent);font-size:15px}
+  .foot{margin-top:40px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:14px}
+  a{color:var(--accent)}
+</style>
+
+<div class="appbar">
+  <div class="inner">
+    <div class="brand"><div class="mark">✏️</div><div class="name">Verde&nbsp;Animation <span>· CTE program</span></div></div>
+    <div class="tabs">
+      <button class="on">Program</button>
+      <button class="soon">Lessons &amp; Videos<span class="dot">soon</span></button>
+      <button class="soon">Assignments<span class="dot">soon</span></button>
+      <button class="soon">Standards Prep<span class="dot">soon</span></button>
+      <button class="soon">Run My Class<span class="dot">soon</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+<header class="top">
+  <p class="kicker">The two-year plan</p>
+  <h1 class="display">Run your Animation program from one app</h1>
+  <p class="lede">Everything a teacher needs to run a CTE Animation program — on any device, no setup. This first screen is the two-year plan: what students do each year, the Yavapai College course it earns, and every video. The other tabs fill in next.</p>
+</header>
+
+<section class="block">
+  <div class="card tight">
+    <div style="font-weight:700;font-size:14px;margin-bottom:2px">Three things run in every class, all year:</div>
+    <div class="legend">
+      <div class="row"><span class="pill p-hands">Hands-on</span><span class="t"><b>The craft.</b> DocsAnimation videos + iPad work. Watch on the Chromebook (headphones), make it on the iPad.</span></div>
+      <div class="row"><span class="pill p-college">College</span><span class="t"><b>The credit.</b> Each semester's work genuinely matches its Yavapai course — real credit, and a stipend for you.</span></div>
+      <div class="row"><span class="pill p-std">Standards</span><span class="t"><b>The test.</b> The Animation prep app runs as its own weekly track toward the CTE certification.</span></div>
+      <div class="row"><span class="pill p-always">Always-on</span><span class="t"><b>Daily habit.</b> Pencil tests and sketchbook run continuously — this is an animation program first.</span></div>
+    </div>
+  </div>
+  <div class="note"><b>Two levels, four college courses, no wasted class.</b> The Yavapai dual-enrollment is a two-year program: Animation I earns two courses, Animation II earns the other two — <b>all four, the maximum</b>. A third level would add no credit, so we don't run one. Naming your second-year class "II" also lands the credit correctly (the catalog pins it to "Digital Animation II"). Stipend is per course (~$750 historically — confirm the current figure with Rich Dambrov).</div>
+</section>
+
+<div id="app"></div>
+
+<section class="block">
+  <h2 class="display" style="font-size:26px;margin:0 0 2px">Where the rest of the app goes</h2>
+  <p class="lede" style="font-size:15px;margin-bottom:6px">This page is screen one. The program is built so each piece below plugs into its own tab — no rebuild.</p>
+  <div class="roadmap">
+    <div class="r live"><div class="rt">📋 Program <span class="tag-live">live</span></div><div class="rs">The two-year plan, by course.</div></div>
+    <div class="r"><div class="rt">▶ Lessons &amp; Videos <span class="tag-soon">next</span></div><div class="rs">Each unit's videos, playable in order.</div></div>
+    <div class="r"><div class="rt">✍️ Assignments <span class="tag-soon">next</span></div><div class="rs">What students turn in per lesson.</div></div>
+    <div class="r"><div class="rt">🎓 Standards Prep <span class="tag-soon">next</span></div><div class="rs">The CTE test-prep app, built in.</div></div>
+    <div class="r"><div class="rt">🎬 Run My Class <span class="tag-soon">next</span></div><div class="rs">Post to Classroom, track progress.</div></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2 class="display" style="font-size:26px;margin:0 0 2px">Still to decide (with you)</h2>
+  <div class="card">
+    <ul class="open">
+      <li><b>A few pieces to build</b> so each college course is fully honest to its title (marked <span class="pill p-build" style="font-size:11px;padding:2px 8px">to build</span> in the plan): a script-breakdown/budget piece for Pre-Production, a shot-for-shot scene study for Production, across-media writing for Screenwriting, a short stop-motion touch for Principles.</li>
+      <li><b>"II vs III" label.</b> Get the registrar (via Meghan) to name your second-year class "Digital Animation II" so the credit lands right.</li>
+      <li><b>Confirm the stipend</b> — current per-course dollar figure from Rich Dambrov / Meghan Paquette.</li>
+      <li><b>Send the paused emails</b> — Meghan (build the classes) and Helen (confirm the course match) are drafted, waiting on your go.</li>
+      <li><b>Module order</b> — move any unit between semesters if it teaches better there.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="foot">Built from your DocsAnimation library + your Screenwriting syllabus + Athena's Yavapai dual-credit record. Draft v2 — restructured to two levels. This is the seed of the Animation app; it will grow in place.</div>
+</div>
+
+<script>
+const LEVELS = [
+  {
+    tag:"Animation I", theme:"Draw it &amp; write it",
+    sub:"Year 1 — the foundation. Learn to draw and design, then learn to write a story for the screen.",
+    weeks:"The “Foundations” unit doubles as your software &amp; hardware start — set up the iPad and app, workstation rules, saving &amp; titling work, and start the sketchbook.",
+    semesters:[
+      {name:"Fall", fma:"FMA100 — Animation Principles", goal:"Drawing, design, and their first real motion.", units:[
+        {n:"Foundations (Intro to Drawing)", ct:10, do:"Get set up, learn the studio habits, and start real drawing fundamentals.", vids:["How to take notes for lectures & demonstrations","Completing assignments and research","Your sketchbook, syllabus and textbooks","Care of workstations, saving/titling work, the Google suite","How to develop your portfolio and reel","How to set and reach your artistic goals","Drawing fundamentals, terms and concepts","How to study and watch films and books","Introduction to Animation","Becoming the best: your health and your art"]},
+        {n:"Figure Drawing", ct:10, do:"Draw the human figure — gesture, construction, and basic anatomy.", vids:["Introduction to the Human Figure","Basics of Drawing the Figure - Gesture","Construction (bean, egg, cylinders, spheres, cubes)","Details (hair, eyes, expressions, shading)","Putting it all together - multiple figures","Head, ribcage and pelvis","Arms - bones and muscle groups","Legs - bones and muscle groups","Hands and feet","Head - proportions and muscles of the face"]},
+        {n:"Intro to Character Design", ct:10, do:"Design heroes, villains, and animal characters — then a model sheet.", vids:["Intro to Character Design (history)","Design a Hero Character (cowboy)","Design a Villain Character","Design a Heroine (construction)","Design a Cute Character (animal)","Main Character farm animal","Villain animal character exploration","Turnaround and action poses","Color and line quality","Designing a model sheet"]},
+        {n:"Still Life", ct:10, do:"Draw from observation — shape, proportion, light and shadow.", vids:["History of Still Life / Composition","Setting up your still life","Measurements and proportion","Storytelling and gesture in still life","Shapes and forms construction","Perspective and depth","Texture details","Shading and light - values and tones","Color in still life - warm & cool palette","The three-hour still life (endurance)"]},
+        {n:"Layout & Perspective", ct:10, do:"1-, 2-, and 3-point perspective — build believable scenes.", vids:["Introduction to layout","1-point perspective (pet shop)","2-point perspective (neighborhood)","3-point perspective (birds-eye)","Desert scene (Road Runner)","Red Riding Hood forest","Cemetery","Swamp","Pirate's cave","Interior of a spaceship"]},
+        {n:"Color & Composition", ct:10, do:"Color theory, harmonies, and how to compose a strong picture.", vids:["Color wheel, color rules & harmonies","Color theory terms part 1","Color theory terms part 2","Color theory terms part 3","Composition part 1","Composition part 2","Composition part 3","The scary comp","The beautiful comp","The rigid/solid comp"]},
+        {n:"Imagination Drawing", ct:10, do:"Invent from your head — creatures, worlds, and thumbnails (drawing practice).", vids:["Introduction to Imagination Drawing","Invention Schematic","Abstract painting of emotions","Creating a Monster","Character and frame","The tree exercise","The fire creature","The water creature","The hero's journey thumbnails","Three-panel and one-panel comics"]},
+        {n:"The 12 Principles + first short animation", ct:12, do:"The rules that make motion feel alive — and your first small animated project.", vids:["Intro to the 12 Principles (bouncing ball)","1 — Squash & Stretch","2 — Anticipation","3 — Staging","4 — Straight Ahead & Pose to Pose","5 — Follow Through & Overlapping","6 — Ease In / Ease Out","7 — Arcs","8 — Secondary Action","9 — Timing","10 — Exaggeration","11 & 12 — Solid Drawing & Appeal"]},
+        {n:"Stop-motion mini-unit", ct:0, build:true, do:"A short stop-motion project so Principles covers 2D, 3D & stop-motion like the college course expects."}
+      ]},
+      {name:"Spring", fma:"FMA103 — Screenwriting I", goal:"Genuinely writing for the screen.", units:[
+        {n:"Your Screenwriting syllabus", ct:0, syllabus:true, do:"Your existing 8-unit Screenwriting Dual-Credit + CTE course — the real writing course, animation-integrated. This is the spine of the semester."},
+        {n:"Visual Storytelling", ct:10, do:"Story structure — characters, wants & needs, stakes, the 3 acts.", vids:["The story of the story","World building - characters and their worlds","Inside feelings vs. outside looks","Wants and needs","Obstacles and roadblocks","Risks and stakes","Story spine, beats, theme and moral","The 3 acts","Line, tone and color","Visual story terms and definitions"]},
+        {n:"Script → shots (intro storyboarding)", ct:0, do:"Turn a written script into simple shots — the bridge from writing into next year's boards.", vids:[]},
+        {n:"Across-media writing exercises", ct:0, build:true, do:"Short writing tasks in TV / doc / YouTube / commercial formats, to match the college course's breadth."}
+      ]}
+    ],
+    always:["Sketchbook warm-ups (5-part intro, then daily)","Pencil tests — start light","Standards app — its own weekly track"]
+  },
+  {
+    tag:"Animation II", theme:"Plan it &amp; make it",
+    sub:"Year 2 — plan a film in the fall, produce and deliver it in the spring.",
+    weeks:"Software &amp; hardware refresh — the production pipeline: animation software, files, and the shared workflow.",
+    semesters:[
+      {name:"Fall", fma:"FMA110 — Pre-Production", goal:"Plan the animated film.", units:[
+        {n:"Storyboarding", ct:10, do:"Break down films shot-by-shot, then board your own short.", vids:["Shot analysis 1: your favorite film","Shot analysis 2: animated film (Beauty & the Beast)","Shot analysis 3: horror / sci-fi","Shot analysis 4: heavy-dialog film","Beginning-Middle-End: your own story","Storyboard a script: the break-up scene","Romeo & Juliet, made comedic","'The Great Gold Fish Escape'","Beginning-Middle-End: old man & a dog","Your original 45-second storyboard"]},
+        {n:"Animatics", ct:10, do:"Turn boards into a timed animatic with camera moves, dialog, and sound.", vids:["Animatic of a favorite scene: camera moves","Animatic of The Wizard of Oz","Romeo & Juliet animatic","Pulp Fiction animatic, part 1","Pulp Fiction animatic, part 2 / clean-up","Pulp Fiction animatic, part 3","Turning your storyboard into an animatic","Recording dialog, sounds and music","Building the animatic & sound, part 1","Building the animatic & sound, part 2 (final)"]},
+        {n:"Background Design", ct:10, do:"Design and paint the worlds your short lives in.", vids:["Fantasy forest: setup & layout","Fantasy forest: rough drawing","Fantasy forest: tonal pass","Fantasy forest: color","Dinosaur land: 8 thumbnails","Dinosaur land: tonal drawing","Dinosaur land: color studies","Dinosaur land: finished color","Swamp: drawing","Swamp: color"]},
+        {n:"Digital Painting", ct:10, do:"Paint on the iPad — used here to build the film's assets and backgrounds.", vids:["Intro to painting on the iPad","Master copy - matching brushstrokes","Painting a monochromatic gesture","Simplified shapes and colors part 1","Simple shapes and colors part 2","Intro to painting sketches","Garden/patio paint sketch","Urban landscape","Character painting part 1","Character painting part 2"]},
+        {n:"Script breakdown, budget & schedule", ct:0, build:true, do:"The producer's paperwork — break down the script, plan a simple budget and schedule. Small add so Pre-Production is fully covered."}
+      ]},
+      {name:"Spring", fma:"FMA102 — Production I", goal:"Produce and deliver the short.", units:[
+        {n:"Animation 101 (Intro Production)", ct:10, do:"Actually animating — bouncing balls, pendulums, squash & stretch in the software.", vids:["Intro to animation, software & the bouncing-ball test","Pendulum swing; ball zoom","Straight-line ball; slow-in/slow-out at 24fps","Ball bouncing; extreme squash & stretch","Ball hits wall & stops; no-decay loop","Ball deflates; ball in perspective","Ball away from viewer; bowling-ball drop","Bubble floats; ball of goo stretches","Ball morphs into a triangle","Pendulum loops; your personal ball bounce"]},
+        {n:"Inking & Clean-Up", ct:3, do:"Clean up rough drawings, then ink and color for a finished look.", vids:["Intro to clean-up (correcting & matching roughs)","Intro to inking and coloring","Intro to coloring"]},
+        {n:"Sound & dialog", ct:0, do:"Record and edit dialog, sound, and music for the short (from the Animatics workflow).", vids:[]},
+        {n:"Shot-for-shot scene study", ct:0, build:true, do:"Analyze a real scene and re-create it — the college course's “analyze + re-create in studio” requirement."},
+        {n:"Produce & deliver the short", ct:0, do:"Put it all together — animate the film, finish it, deliver it, and critique (your capstone).", vids:[]}
+      ]}
+    ],
+    always:["Pencil tests — advanced acting & action scenes","Sketchbook — daily","Standards app — final-year push"]
+  }
+];
+
+const PENCIL = ["Juggling","Lifting a heavy object","Annoyed — turning your back on another character","Pressing an elevator button and waiting","Peering around a corner","Starting to say something, then stopping","Putting on and zipping up a jacket","Texting, waiting, then reading and reacting","Standing up from lying on the ground","Personal acting & action scene"];
+
+function unitHTML(u){
+  const v = u.vids && u.vids.length
+    ? `<details class="vids"><summary>${u.vids.length} videos</summary><ol>${u.vids.map(t=>`<li>${t}</li>`).join("")}</ol></details>` : "";
+  let ct;
+  if(u.build) ct = `<span class="pill p-build" style="font-size:11px;padding:2px 8px">to build</span>`;
+  else if(u.syllabus) ct = `<span class="pill p-college" style="font-size:11px;padding:2px 8px">your syllabus</span>`;
+  else if(u.ct) ct = `<span class="u-ct">${u.ct} videos</span>`;
+  else ct = `<span class="u-ct">project</span>`;
+  return `<div class="unit"><div class="u-h"><span class="u-name">${u.n}</span>${ct}</div>
+    <p class="u-do">${u.do}</p>${v}</div>`;
+}
+function levelHTML(y){
+  const sems = y.semesters.map(s=>`
+    <div class="col">
+      <h4>${s.name}</h4>
+      <p class="fma">${s.fma} <span class="pill p-college" style="font-size:10px;padding:2px 7px">college credit</span></p>
+      <p class="goal">${s.goal}</p>
+      ${s.units.map(unitHTML).join("")}
+    </div>`).join("");
+  return `<section class="block">
+    <span class="pill p-hands">${y.tag}</span>
+    <h2 class="display" style="font-size:clamp(23px,4vw,30px);margin:8px 0 2px;font-weight:800">${y.theme}</h2>
+    <p style="color:var(--muted);font-size:15px;margin:0 0 14px">${y.sub}</p>
+    <div class="card">
+      <div class="weeks"><span class="n">Weeks 1–4</span><span class="t"><b>Software &amp; hardware.</b> ${y.weeks}</span></div>
+      <div class="sem">${sems}</div>
+      <div class="always-strip"><span class="pill p-always">Always-on</span>${y.always.map(a=>`<span>· ${a}</span>`).join("")}</div>
+    </div>
+  </section>`;
+}
+document.getElementById("app").innerHTML = LEVELS.map(levelHTML).join("") +
+  `<section class="block">
+    <span class="pill p-always">Always-on · both years</span>
+    <h2 class="display" style="font-size:clamp(23px,4vw,30px);margin:8px 0 2px;font-weight:800">Pencil tests — the daily habit</h2>
+    <p style="color:var(--muted);font-size:15px;margin:0 0 14px">Short acting/action exercises that run every day, all program long, getting harder. This is where students keep actually animating.</p>
+    <div class="card"><div class="unit"><div class="u-h"><span class="u-name">Pencil Test exercises</span><span class="u-ct">10 videos</span></div>
+      <p class="u-do">One scene at a time — a character doing a small, believable action.</p>
+      <details class="vids"><summary>10 videos</summary><ol>${PENCIL.map(t=>`<li>${t}</li>`).join("")}</ol></details>
+    </div></div>
+  </section>`;
+</script>
